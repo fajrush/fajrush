@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fajrush | Official Links & Feed</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -20,12 +21,7 @@
             --border: rgba(255, 255, 255, 0.08);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
             background-color: var(--bg-color);
@@ -34,258 +30,84 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 40px 20px;
+            padding: 40px 20px 100px 20px;
             position: relative;
             overflow-x: hidden;
         }
 
-        .glow-1 {
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            background: var(--accent-purple);
-            filter: blur(160px);
-            opacity: 0.12;
-            top: -50px;
-            left: -50px;
-            pointer-events: none;
-        }
-        .glow-2 {
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            background: var(--accent-cyan);
-            filter: blur(160px);
-            opacity: 0.12;
-            bottom: 50px;
-            right: -50px;
-            pointer-events: none;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 460px;
-            z-index: 10;
-        }
-
+        .glow-1 { position: absolute; width: 350px; height: 350px; background: var(--accent-purple); filter: blur(160px); opacity: 0.12; top: -50px; left: -50px; pointer-events: none; }
+        .glow-2 { position: absolute; width: 350px; height: 350px; background: var(--accent-cyan); filter: blur(160px); opacity: 0.12; bottom: 50px; right: -50px; pointer-events: none; }
+        .container { width: 100%; max-width: 460px; z-index: 10; }
         .hidden { display: none !important; }
 
-        /* --- USER VIEW --- */
-        .profile {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        .avatar {
-            width: 96px;
-            height: 96px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-            padding: 3px;
-            margin: 0 auto 16px;
-            box-shadow: 0 8px 30px rgba(167, 139, 250, 0.2);
-        }
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            background: var(--bg-color);
-        }
-        .profile h1 {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
-            background: linear-gradient(to right, #fff, #d4d4d8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        /* --- PROFILE --- */
+        .profile { text-align: center; margin-bottom: 32px; }
+        .avatar { width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)); padding: 3px; margin: 0 auto 16px; box-shadow: 0 8px 30px rgba(167, 139, 250, 0.2); }
+        .avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: var(--bg-color); }
+        .profile h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; background: linear-gradient(to right, #fff, #d4d4d8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .profile p { font-size: 14px; color: var(--text-muted); }
 
-        .links-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-bottom: 40px;
-        }
-        .link-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 600;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .link-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(255, 255, 255, 0.2);
-            background: #1a1a22;
-        }
+        /* --- LINKS --- */
+        .links-wrapper { display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+        .link-card { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; text-decoration: none; color: var(--text-main); font-weight: 600; transition: all 0.25s ease; }
+        .link-card:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.2); background: #1a1a22; }
         .link-left { display: flex; align-items: center; gap: 14px; }
         .link-left i { font-size: 22px; color: var(--accent-cyan); }
         .link-card .arrow { font-size: 18px; color: var(--text-muted); transition: 0.2s; }
         .link-card:hover .arrow { transform: translateX(3px); color: #fff; }
 
-        /* --- INSTAGRAM FEED SECTION --- */
-        .feed-heading {
-            font-size: 16px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #fff;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-        }
+        /* --- INSTAGRAM FEED --- */
+        .feed-heading { font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .feed-heading i { color: #e1306c; font-size: 20px; }
-
-        .feed-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .feed-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: 0.3s ease;
-        }
-        .feed-card:hover { transform: scale(1.02); border-color: rgba(255,255,255,0.15); }
-        .feed-img-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 100%; /* 1:1 Aspect Ratio mirip IG */
-            background: #000;
-        }
-        .feed-img-wrapper img {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
-        }
+        .feed-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .feed-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s ease; }
+        .feed-img-wrapper { position: relative; width: 100%; padding-top: 100%; background: #000; }
+        .feed-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .feed-info { padding: 12px; }
-        .feed-caption {
-            font-size: 12px;
-            color: #fff;
-            font-weight: 500;
-            line-height: 1.4;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .feed-actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .like-btn {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-        }
+        .feed-caption { font-size: 12px; color: #fff; font-weight: 500; line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .like-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600; }
         .like-btn.liked { color: #ef4444; }
-        .like-btn.liked i { font-fill: dashed; }
 
-        /* --- FLOATING ADMIN BUTTON --- */
+        /* --- ADMIN BUTTON (Kanan Atas biar gak ketutup bar bawah HP) --- */
         .admin-trigger {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 44px;
-            height: 44px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #1e1b4b, #141419);
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             z-index: 100;
-            transition: 0.2s;
+            box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
         }
-        .admin-trigger:hover { color: #fff; border-color: var(--accent-purple); }
 
-        /* --- PANELS (LOGIN & DASHBOARD) --- */
-        .panel {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-        }
+        /* --- PANELS --- */
+        .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
         .panel h2 { font-size: 20px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-        .panel h3 { font-size: 15px; font-weight: 700; margin-top: 20px; color: var(--accent-cyan); }
-        
         .input-group { margin-bottom: 14px; }
-        .input-group label {
-            display: block; font-size: 11px; text-transform: uppercase;
-            font-weight: 700; color: var(--text-muted); margin-bottom: 6px;
-        }
-        .input-group input, .input-group select, .input-group textarea {
-            width: 100%; padding: 12px 14px; background: #09090b;
-            border: 1px solid var(--border); border-radius: 10px;
-            color: #fff; font-size: 14px; outline: none;
-        }
+        .input-group label { display: block; font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 12px 14px; background: #09090b; border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 14px; outline: none; }
         .input-group input:focus, .input-group textarea:focus { border-color: var(--accent-purple); }
-
-        .btn {
-            width: 100%; padding: 12px;
-            background: linear-gradient(135deg, var(--accent-purple), #7c3aed);
-            color: #fff; border: none; border-radius: 10px;
-            font-weight: 700; cursor: pointer; font-size: 14px; transition: 0.2s;
-        }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-sec { background: transparent; border: 1px solid var(--border); color: var(--text-muted); margin-top: 10px;}
-        .btn-sec:hover { color: #fff; border-color: #ef4444; }
-
-        .admin-list {
-            margin: 15px 0; max-height: 150px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .admin-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 12px; background: #09090b; border-radius: 8px; border: 1px solid var(--border);
-        }
-        .admin-item span { font-size: 13px; font-weight: 600; }
-        .btn-delete { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 16px; }
-
-        .tab-menu {
-            display: flex; gap: 10px; margin-bottom: 20px;
-            border-bottom: 1px solid var(--border); padding-bottom: 10px;
-        }
-        .tab-btn {
-            background: none; border: none; color: var(--text-muted);
-            font-weight: 700; font-size: 14px; cursor: pointer; padding: 4px 8px;
-        }
-        .tab-btn.active { color: var(--accent-purple); border-bottom: 2px solid var(--accent-purple); }
-
-        footer { text-align: center; margin-top: 40px; font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+        .btn { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent-purple), #7c3aed); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        .btn-sec { background: transparent; border: 1px solid var(--border); color: var(--text-muted); margin-top: 10px; }
+        .admin-list { margin: 15px 0; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #09090b; border-radius: 8px; border: 1px solid var(--border); }
+        .btn-delete { background: none; border: none; color: #ef4444; cursor: pointer; }
+        .tab-menu { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .tab-btn { background: none; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; }
+        .tab-btn.active { color: var(--accent-purple); }
+        footer { text-align: center; margin-top: 40px; font-size: 11px; color: var(--text-muted); }
     </style>
 </head>
 <body>
 
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
+    <div class="glow-1"></div><div class="glow-2"></div>
 
     <div class="admin-trigger" id="adminTriggerBtn" onclick="toggleAdminPanel()">
         <i class="ph-bold ph-gear"></i>
@@ -295,277 +117,176 @@
         
         <div id="userView">
             <div class="profile">
-                <div class="avatar">
-                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150" alt="Fajrush">
-                </div>
+                <div class="avatar"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150" alt="Fajrush"></div>
                 <h1>@fajrush33</h1>
                 <p>Welcome to my space 🪐</p>
             </div>
-
             <div class="links-wrapper" id="linksContainer"></div>
-
-            <div class="feed-heading">
-                <i class="ph-bold ph-instagram-logo"></i> Recent Posts
-            </div>
-            <div class="feed-grid" id="feedContainer">
-                </div>
-
+            <div class="feed-heading"><i class="ph-bold ph-instagram-logo"></i> Recent Posts</div>
+            <div class="feed-grid" id="feedContainer"></div>
             <footer>&copy; 2026 Fajrush. All Rights Reserved.</footer>
         </div>
 
-
         <div id="loginView" class="panel hidden">
             <h2><i class="ph-bold ph-lock-key"></i> Admin Login</h2>
-            <div class="input-group">
-                <label>Username</label>
-                <input type="text" id="username" placeholder="admin">
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="password" placeholder="123">
-            </div>
+            <div class="input-group"><label>Username</label><input type="text" id="username" placeholder="admin"></div>
+            <div class="input-group"><label>Password</label><input type="password" id="password" placeholder="123"></div>
             <button class="btn" onclick="handleLogin()">Login Bro</button>
             <button class="btn btn-sec" onclick="backToLinks()">Batal</button>
         </div>
 
-
         <div id="dashboardView" class="panel hidden">
-            <h2><i class="ph-bold ph-sliders"></i> Admin Dashboard</h2>
-            
+            <h2><i class="ph-bold ph-sliders"></i> Dashboard</h2>
             <div class="tab-menu">
-                <button class="tab-btn active" id="tabLinkBtn" onclick="switchTab('links')">Manage Links</button>
-                <button class="tab-btn" id="tabFeedBtn" onclick="switchTab('feeds')">Manage Posts</button>
+                <button class="tab-btn active" id="tabLinkBtn" onclick="switchTab('links')">Links</button>
+                <button class="tab-btn" id="tabFeedBtn" onclick="switchTab('feeds')">Posts</button>
             </div>
 
             <div id="tabLinksContent">
                 <div class="admin-list" id="adminLinksList"></div>
-                <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
-                <h3>Tambah Link Baru</h3>
-                <div class="input-group" style="margin-top:10px;">
-                    <label>Nama/Judul Link</label>
-                    <input type="text" id="newTitle" placeholder="Contoh: TikTok Shop">
-                </div>
-                <div class="input-group">
-                    <label>URL Link</label>
-                    <input type="url" id="newUrl" placeholder="https://...">
-                </div>
-                <div class="input-group">
-                    <label>Icon</label>
+                <div class="input-group"><label>Judul Link</label><input type="text" id="newTitle"></div>
+                <div class="input-group"><label>URL</label><input type="url" id="newUrl"></div>
+                <div class="input-group"><label>Icon</label>
                     <select id="newIcon">
                         <option value="ph-instagram-logo">Instagram</option>
-                        <option value="ph-coins">Koin/Donasi</option>
-                        <option value="ph-game-controller">Game/Top Up</option>
-                        <option value="ph-link">Link Biasa</option>
+                        <option value="ph-coins">Donasi</option>
+                        <option value="ph-game-controller">Top Up Game</option>
                     </select>
                 </div>
-                <button class="btn" onclick="addNewLink()">Simpan Link</button>
+                <button class="btn" onclick="addNewLink()">Tambah Link</button>
             </div>
 
             <div id="tabFeedsContent" class="hidden">
                 <div class="admin-list" id="adminFeedsList"></div>
-                <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
-                <h3>Posting Foto Baru</h3>
-                <div class="input-group" style="margin-top:10px;">
-                    <label>Pilih Gambar</label>
-                    <input type="file" id="postImage" accept="image/*">
-                </div>
-                <div class="input-group">
-                    <label>Caption Foto</label>
-                    <textarea id="postCaption" rows="3" placeholder="Tulis caption aesthetic mu bro..."></textarea>
-                </div>
-                <button class="btn" onclick="addNewPost()">Publish Postingan</button>
+                <div class="input-group"><label>Foto</label><input type="file" id="postImage" accept="image/*"></div>
+                <div class="input-group"><label>Caption</label><textarea id="postCaption" rows="2"></textarea></div>
+                <button class="btn" onclick="addNewPost()">Publish Foto</button>
             </div>
-
             <button class="btn btn-sec" onclick="handleLogout()">Logout</button>
         </div>
-
     </div>
 
     <script>
-        // --- DATA DEFAULT AWAL ---
-        const defaultLinks = [
-            { id: 1, title: 'Instagram', url: 'https://www.instagram.com/fajrush33', icon: 'ph-instagram-logo' },
-            { id: 2, title: 'Donasi', url: 'https://saweria.co/fajrush', icon: 'ph-coins' },
-            { id: 3, title: 'Top Up game terpercaya', url: 'https://saweria.co/fajrush/toko-top-up', icon: 'ph-game-controller' }
-        ];
-
-        const defaultPosts = [
-            { id: 101, image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400', caption: 'Setup gaming baru nih bro, gas mabar! 🕹️', likes: 12, liked: false },
-            { id: 102, image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400', caption: 'Fokus grind sampe dapet rank mythical glory! 🔥', likes: 24, liked: false }
-        ];
-
-        let links = JSON.parse(localStorage.getItem('fajrush_links')) || defaultLinks;
-        let posts = JSON.parse(localStorage.getItem('fajrush_posts')) || defaultPosts;
+        // --- DATA SUPABASE ASLI PUNYA FAJRUSH ---
+        const SUPABASE_URL = "https://beoczcxkmmsqkttobsyb.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_X_cNuq7g24Y3m0kQ2dxJxw_WURu1MmY";
+        
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const adminAccount = { username: "admin", password: "123" };
 
-        // --- RENDER COMPONENT ---
-        function renderAll() {
-            // Render Links
-            document.getElementById('linksContainer').innerHTML = links.map(link => `
+        async function loadData() {
+            let { data: dbLinks } = await _supabase.from('links').select('*').order('id', { ascending: true });
+            let { data: dbPosts } = await _supabase.from('posts').select('*').order('created_at', { ascending: false });
+
+            document.getElementById('linksContainer').innerHTML = (dbLinks || []).map(link => `
                 <a href="${link.url}" target="_blank" class="link-card">
                     <div class="link-left"><i class="ph-bold ${link.icon}"></i><span>${link.title}</span></div>
                     <i class="ph-bold ph-arrow-up-right arrow"></i>
                 </a>
             `).join('');
 
-            document.getElementById('adminLinksList').innerHTML = links.map(link => `
+            document.getElementById('adminLinksList').innerHTML = (dbLinks || []).map(link => `
                 <div class="admin-item"><span>${link.title}</span>
                     <button class="btn-delete" onclick="deleteLink(${link.id})"><i class="ph-bold ph-trash"></i></button>
                 </div>
             `).join('');
 
-            // Render Feed Posts
-            document.getElementById('feedContainer').innerHTML = posts.map(post => `
+            document.getElementById('feedContainer').innerHTML = (dbPosts || []).map(post => `
                 <div class="feed-card">
-                    <div class="feed-img-wrapper"><img src="${post.image}" alt="Post"></div>
+                    <div class="feed-img-wrapper"><img src="${post.image_url}" alt="Post"></div>
                     <div class="feed-info">
                         <div class="feed-caption">${post.caption}</div>
-                        <div class="feed-actions">
-                            <button class="like-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
-                                <i class="${post.liked ? 'ph-fill' : 'ph-bold'} ph-heart"></i> <span class="like-count">${post.likes}</span>
-                            </button>
-                        </div>
+                        <button class="like-btn" onclick="addLike(${post.id}, ${post.likes})">❤️ ${post.likes}</button>
                     </div>
                 </div>
             `).join('');
 
-            document.getElementById('adminFeedsList').innerHTML = posts.map(post => `
-                <div class="admin-item"><span style="max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${post.caption}</span>
+            document.getElementById('adminFeedsList').innerHTML = (dbPosts || []).map(post => `
+                <div class="admin-item"><span style="max-width:200px;overflow:hidden;">${post.caption}</span>
                     <button class="btn-delete" onclick="deletePost(${post.id})"><i class="ph-bold ph-trash"></i></button>
                 </div>
             `).join('');
         }
 
-        // --- INTERAKSI USER (LIKE POST) ---
-        function toggleLike(postId) {
-            posts = posts.map(post => {
-                if (post.id === postId) {
-                    post.liked = !post.liked;
-                    post.likes = post.liked ? post.likes + 1 : post.likes - 1;
-                }
-                return post;
-            });
-            localStorage.setItem('fajrush_posts', JSON.stringify(posts));
-            renderAll();
+        async function addNewLink() {
+            const title = document.getElementById('newTitle').value;
+            const url = document.getElementById('newUrl').value;
+            const icon = document.getElementById('newIcon').value;
+            if(!title || !url) return alert('Isi semua bro!');
+            
+            await _supabase.from('links').insert([{ title, url, icon }]);
+            document.getElementById('newTitle').value = ''; document.getElementById('newUrl').value = '';
+            loadData();
         }
 
-        // --- NAVIGATION & TABS ---
+        async function deleteLink(id) {
+            if(confirm('Hapus link ini?')) { await _supabase.from('links').delete().eq('id', id); loadData(); }
+        }
+
+        async function addNewPost() {
+            const fileInput = document.getElementById('postImage');
+            const caption = document.getElementById('postCaption').value;
+            if(fileInput.files.length === 0 || !caption) return alert('Lengkapi data postingan!');
+
+            const file = fileInput.files[0];
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}.${fileExt}`;
+            
+            let { data: uploadData, error } = await _supabase.storage.from('gallery').upload(fileName, file);
+            if(error) return alert('Gagal upload gambar! Pastikan Bucket Storage bernama "gallery" berstatus Public.');
+
+            const { data: urlData } = _supabase.storage.from('gallery').getPublicUrl(fileName);
+            
+            await _supabase.from('posts').insert([{ image_url: urlData.publicUrl, caption, likes: 0 }]);
+            
+            fileInput.value = ''; document.getElementById('postCaption').value = '';
+            loadData();
+            alert('Foto berhasil terposting secara global! 🚀');
+        }
+
+        async function deletePost(id) {
+            if(confirm('Hapus post ini?')) { await _supabase.from('posts').delete().eq('id', id); loadData(); }
+        }
+
+        async function addLike(id, currentLikes) {
+            await _supabase.from('posts').update({ likes: currentLikes + 1 }).eq('id', id);
+            loadData();
+        }
+
         function toggleAdminPanel() {
             const userView = document.getElementById('userView');
             const triggerIcon = document.querySelector('#adminTriggerBtn i');
-            if (userView.classList.contains('hidden')) { backToLinks(); return; }
-
-            userView.classList.add('hidden');
-            triggerIcon.className = "ph-bold ph-x";
-            if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
-                document.getElementById('dashboardView').classList.remove('hidden');
-            } else {
-                document.getElementById('loginView').classList.remove('hidden');
-            }
+            if (!userView.classList.contains('hidden')) {
+                userView.classList.add('hidden');
+                triggerIcon.className = "ph-bold ph-x";
+                if (sessionStorage.getItem('isAdminLoggedIn') === 'true') { document.getElementById('dashboardView').classList.remove('hidden'); }
+                else { document.getElementById('loginView').classList.remove('hidden'); }
+            } else { backToLinks(); }
         }
-
         function backToLinks() {
             document.getElementById('userView').classList.remove('hidden');
             document.getElementById('loginView').classList.add('hidden');
             document.getElementById('dashboardView').classList.add('hidden');
             document.querySelector('#adminTriggerBtn i').className = "ph-bold ph-gear";
         }
-
         function switchTab(tab) {
-            if (tab === 'links') {
-                document.getElementById('tabLinkBtn').classList.add('active');
-                document.getElementById('tabFeedBtn').classList.remove('active');
-                document.getElementById('tabLinksContent').classList.remove('hidden');
-                document.getElementById('tabFeedsContent').classList.add('hidden');
+            if(tab === 'links') {
+                document.getElementById('tabLinkBtn').classList.add('active'); document.getElementById('tabFeedBtn').classList.remove('active');
+                document.getElementById('tabLinksContent').classList.remove('hidden'); document.getElementById('tabFeedsContent').classList.add('hidden');
             } else {
-                document.getElementById('tabLinkBtn').classList.remove('active');
-                document.getElementById('tabFeedBtn').classList.add('active');
-                document.getElementById('tabLinksContent').classList.add('hidden');
-                document.getElementById('tabFeedsContent').classList.remove('hidden');
+                document.getElementById('tabLinkBtn').classList.remove('active'); document.getElementById('tabFeedBtn').classList.add('active');
+                document.getElementById('tabLinksContent').classList.add('hidden'); document.getElementById('tabFeedsContent').classList.remove('hidden');
             }
         }
-
-        // --- MANAJEMEN DATA LINK ---
-        function addNewLink() {
-            const title = document.getElementById('newTitle').value;
-            const url = document.getElementById('newUrl').value;
-            const icon = document.getElementById('newIcon').value;
-            if (!title || !url) return alert('Isi data yang lengkap bro!');
-
-            links.push({ id: Date.now(), title, url, icon });
-            localStorage.setItem('fajrush_links', JSON.stringify(links));
-            document.getElementById('newTitle').value = ''; document.getElementById('newUrl').value = '';
-            renderAll();
-            alert('Link berhasil ditambahkan! 🔥');
-        }
-
-        function deleteLink(id) {
-            if(confirm('Hapus link ini bro?')) {
-                links = links.filter(l => l.id !== id);
-                localStorage.setItem('fajrush_links', JSON.stringify(links));
-                renderAll();
-            }
-        }
-
-        // --- MANAJEMEN DATA POST FEEDS ---
-        function addNewPost() {
-            const fileInput = document.getElementById('postImage');
-            const caption = document.getElementById('postCaption').value;
-
-            if (fileInput.files.length === 0 || !caption) {
-                return alert('Pilih foto dan isi caption-nya dulu bro! 📸');
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onloadend = function () {
-                const newPost = {
-                    id: Date.now(),
-                    image: reader.result, // Base64 string gambar
-                    caption: caption,
-                    likes: 0,
-                    liked: false
-                };
-
-                posts.unshift(newPost); // Taruh di urutan paling atas
-                localStorage.setItem('fajrush_posts', JSON.stringify(posts));
-                
-                // Reset form postingan
-                fileInput.value = '';
-                document.getElementById('postCaption').value = '';
-                renderAll();
-                alert('Foto berhasil diposting ke feed! 🚀');
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        function deletePost(id) {
-            if(confirm('Hapus postingan foto ini bro?')) {
-                posts = posts.filter(p => p.id !== id);
-                localStorage.setItem('fajrush_posts', JSON.stringify(posts));
-                renderAll();
-            }
-        }
-
-        // --- AUTH ---
         function handleLogin() {
-            const userIn = document.getElementById('username').value;
-            const passIn = document.getElementById('password').value;
-            if (userIn === adminAccount.username && passIn === adminAccount.password) {
+            if(document.getElementById('username').value === adminAccount.username && document.getElementById('password').value === adminAccount.password) {
                 sessionStorage.setItem('isAdminLoggedIn', 'true');
-                document.getElementById('loginView').classList.add('hidden');
-                document.getElementById('dashboardView').classList.remove('hidden');
-            } else { alert('Gagal login bro! ❌'); }
+                document.getElementById('loginView').classList.add('hidden'); document.getElementById('dashboardView').classList.remove('hidden');
+            } else { alert('Salah password bro!'); }
         }
+        function handleLogout() { sessionStorage.removeItem('isAdminLoggedIn'); backToLinks(); }
 
-        function handleLogout() {
-            sessionStorage.removeItem('isAdminLoggedIn');
-            backToLinks();
-        }
-
-        renderAll();
+        loadData();
     </script>
 </body>
 </html>
