@@ -19,7 +19,6 @@
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
-            --space-nebula: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -36,10 +35,43 @@
             overflow-x: hidden;
         }
 
-        /* --- BACKGROUND STAR FIELD --- */
+        /* --- BACKGROUND SPACE ANIMATION --- */
         .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: radial-gradient(circle at center, #1e293b 0%, #020617 100%); z-index: -1; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--d) infinite; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        /* ASTRONOT MELAYANG */
+        .floating-astronaut {
+            position: fixed;
+            bottom: 15%;
+            left: 5%;
+            font-size: 50px;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatAstronaut 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.3));
+        }
+        @keyframes floatAstronaut {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(10deg); }
+        }
+
+        /* ROKET JATUH (METEOR EFFECT) */
+        .falling-rocket {
+            position: fixed;
+            top: -50px;
+            font-size: 32px;
+            pointer-events: none;
+            z-index: 1;
+            transform: rotate(135deg); /* Bikin roket madep bawah serong */
+            animation: rocketFall var(--speed) linear infinite;
+        }
+        @keyframes rocketFall {
+            0% { transform: translate(0, 0) rotate(135deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(-300px, 100vh) rotate(135deg); opacity: 0; }
+        }
 
         .container { width: 100%; max-width: 460px; z-index: 10; }
         .hidden { display: none !important; }
@@ -68,7 +100,7 @@
         .feed-info { padding: 12px; }
         .feed-caption { font-size: 12px; color: #fff; line-height: 1.4; margin-bottom: 8px; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* --- COSMIC ADMIN TRIGGER --- */
+        /* --- COSMIC ADMIN TRIGGER (MENYAMAR) --- */
         .admin-trigger {
             position: absolute; top: 25px; right: 25px; width: 44px; height: 44px;
             background: rgba(30, 27, 75, 0.5); border: 1px solid var(--accent-purple);
@@ -87,7 +119,6 @@
             backdrop-filter: blur(20px);
             position: relative; overflow: hidden;
         }
-        /* Nebula effect inside panel */
         .space-panel::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
@@ -123,6 +154,8 @@
 <body>
 
     <div class="stars" id="starField"></div>
+    <div class="floating-astronaut">🧑‍🚀</div>
+    <div id="rocketField"></div>
 
     <div class="admin-trigger" onclick="toggleAdminPanel()">
         <i class="ph-bold ph-planet"></i>
@@ -187,30 +220,41 @@
     </div>
 
     <script>
-        // --- SUPABASE CONFIG ---
+        // --- DATA SUPABASE ASLI ---
         const SUPABASE_URL = "https://beoczcxkmmsqkttobsyb.supabase.co";
         const SUPABASE_KEY = "sb_publishable_X_cNuq7g24Y3m0kQ2dxJxw_WURu1MmY";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        // --- SECRET AUTH (Tetap Sesuai Permintaan Lu Bro) ---
+        // --- AKUN LOGIN RAHASIA LU ---
         const adminAccount = { username: "fajrush", password: "fajrush2007" };
 
-        // 1. Generate Stars Background
+        // Generate Bintang Kelap-kelip
         function createStars() {
             const field = document.getElementById('starField');
-            for(let i=0; i<100; i++) {
+            for(let i=0; i<80; i++) {
                 let star = document.createElement('div');
                 star.className = 'star';
-                let x = Math.random() * 100;
-                let y = Math.random() * 100;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
                 let size = Math.random() * 2 + 1;
-                let duration = Math.random() * 3 + 2;
-                star.style.left = x + '%';
-                star.style.top = y + '%';
                 star.style.width = size + 'px';
                 star.style.height = size + 'px';
-                star.style.setProperty('--d', duration + 's');
+                star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
                 field.appendChild(star);
+            }
+        }
+
+        // Generate Animasi Roket Jatuh Bergantian
+        function createFallingRockets() {
+            const field = document.getElementById('rocketField');
+            for(let i=0; i<4; i++) {
+                let rocket = document.createElement('div');
+                rocket.className = 'falling-rocket';
+                rocket.innerText = '🚀';
+                rocket.style.left = (Math.random() * 60 + 30) + '%'; // Biar jatuh di sekitar area kanan/tengah
+                rocket.style.setProperty('--speed', (Math.random() * 4 + 4) + 's');
+                rocket.style.animationDelay = (Math.random() * 6) + 's';
+                field.appendChild(rocket);
             }
         }
 
@@ -274,7 +318,7 @@
             const fileName = `${Date.now()}.${file.name.split('.').pop()}`;
             
             let { data: uploadData, error } = await _supabase.storage.from('gallery').upload(fileName, file);
-            if(error) return alert('Signal Lost! Check Storage permissions.');
+            if(error) return alert('Signal Lost! Check Storage bucket named "gallery".');
 
             const { data: urlData } = _supabase.storage.from('gallery').getPublicUrl(fileName);
             await _supabase.from('posts').insert([{ image_url: urlData.publicUrl, caption, likes: 0 }]);
@@ -293,7 +337,7 @@
             loadData();
         }
 
-        // --- UI SYSTEM ---
+        // --- UI NAVIGATION ---
         function toggleAdminPanel() {
             const userView = document.getElementById('userView');
             if (!userView.classList.contains('hidden')) {
@@ -322,6 +366,7 @@
         function handleLogout() { sessionStorage.removeItem('isAdminLoggedIn'); backToLinks(); }
 
         createStars();
+        createFallingRockets();
         loadData();
     </script>
 </body>
