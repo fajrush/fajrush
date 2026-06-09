@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fajrush | Space Explorer</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -40,30 +39,14 @@
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle var(--d) infinite; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
 
-        /* ASTRONOT MELAYANG */
         .floating-astronaut {
-            position: fixed;
-            bottom: 15%;
-            left: 5%;
-            font-size: 50px;
-            pointer-events: none;
-            z-index: 1;
-            animation: floatAstronaut 6s ease-in-out infinite;
-            filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.3));
+            position: fixed; bottom: 15%; left: 5%; font-size: 50px; pointer-events: none; z-index: 1;
+            animation: floatAstronaut 6s ease-in-out infinite; filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.3));
         }
-        @keyframes floatAstronaut {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(10deg); }
-        }
+        @keyframes floatAstronaut { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-25px) rotate(10deg); } }
 
-        /* ROKET JATUH */
         .falling-rocket {
-            position: fixed;
-            top: -50px;
-            font-size: 32px;
-            pointer-events: none;
-            z-index: 1;
-            transform: rotate(135deg);
+            position: fixed; top: -50px; font-size: 32px; pointer-events: none; z-index: 1; transform: rotate(135deg);
             animation: rocketFall var(--speed) linear infinite;
         }
         @keyframes rocketFall {
@@ -100,7 +83,7 @@
         .feed-info { padding: 12px; }
         .feed-caption { font-size: 12px; color: #fff; line-height: 1.4; margin-bottom: 8px; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* --- COSMIC ADMIN TRIGGER --- */
+        /* --- DECORATION TRIGGER --- */
         .admin-trigger {
             position: absolute; top: 25px; right: 25px; width: 44px; height: 44px;
             background: rgba(30, 27, 75, 0.5); border: 1px solid var(--accent-purple);
@@ -110,14 +93,11 @@
         }
         .admin-trigger:hover { transform: rotate(90deg); background: var(--accent-purple); color: white; box-shadow: 0 0 20px var(--accent-purple); }
 
-        /* --- SPACE DASHBOARD THEME (ADMIN PANEL) --- */
+        /* --- SPACE DASHBOARD THEME --- */
         .space-panel {
             background: linear-gradient(160deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.95));
-            border: 2px solid var(--accent-purple);
-            border-radius: 30px; padding: 30px;
-            box-shadow: 0 0 40px rgba(124, 58, 237, 0.3);
-            backdrop-filter: blur(20px);
-            position: relative; overflow: hidden;
+            border: 2px solid var(--accent-purple); border-radius: 30px; padding: 30px;
+            box-shadow: 0 0 40px rgba(124, 58, 237, 0.3); backdrop-filter: blur(20px); position: relative;
         }
 
         .space-panel h2 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: #fff; margin-bottom: 24px; text-align: center; letter-spacing: 1px; }
@@ -185,12 +165,13 @@
             <div class="tab-menu">
                 <button class="tab-btn active" id="tabLinkBtn" onclick="switchTab('links')">WORMHOLES</button>
                 <button class="tab-btn" id="tabFeedBtn" onclick="switchTab('feeds')">GALAXY FEED</button>
+                <button class="tab-btn" id="tabDataBtn" onclick="switchTab('data')">EXPORT</button>
             </div>
 
             <div id="tabLinksContent">
                 <div class="admin-list" id="adminLinksList"></div>
                 <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:20px;">
-                    <div class="input-group"><label>PORTAL NAME</label><input type="text" id="newTitle" placeholder="Contoh: TikTok"></div>
+                    <div class="input-group"><label>PORTAL NAME</label><input type="text" id="newTitle" placeholder="Contoh: Instagram"></div>
                     <div class="input-group"><label>COORDINATES (URL)</label><input type="url" id="newUrl" placeholder="https://..."></div>
                     <div class="input-group"><label>SYSTEM ICON</label>
                         <select id="newIcon">
@@ -213,120 +194,149 @@
                 </div>
             </div>
 
+            <div id="tabDataContent" class="hidden">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">
+                    Klik tombol di bawah untuk menyalin kode data terbaru lu, lalu paste kodenya ke baris `KODE_MASTER_DATA` di file HTML lu biar tersimpan permanen secara global!
+                </p>
+                <button class="btn-cosmic" onclick="exportMasterData()">SALIN KODE DATA GLOBAL</button>
+            </div>
+
             <button class="btn-sec" style="width:100%; border:1px solid rgba(239, 68, 68, 0.4); color:#ef4444; border-radius:12px; padding:12px; margin-top:20px; cursor:pointer; background:none; font-weight:700;" onclick="handleLogout()">TERMINATE SESSION</button>
         </div>
     </div>
 
     <script>
-        // --- DATA SUPABASE LU SUDAH KITA AKURATKAN ---
-        const SUPABASE_URL = "https://beoczcxkmmsqkttobsyb.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_X_cNuq7g24Y3m0kQ2dxJxw_WURu1MmY"; 
-        
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // =========================================================================
+        // 🔮 KODE MASTER DATA (TEMPAT MENYIMPAN DATA SECARA GLOBAL AGAR DILIHAT SEMUA ORANG)
+        // Lu bisa paste kode hasil tombol EXPORT di sini agar link & foto lu permanen.
+        // =========================================================================
+        const KODE_MASTER_DATA = null; 
+
+        // --- DATA DEFAULT AWAL BANGET (KALAU KOSONG) ---
+        const defaultLinks = [
+            { id: 1, title: 'Instagram', url: 'https://www.instagram.com/fajrush33', icon: 'ph-instagram-logo' },
+            { id: 2, title: 'Donasi', url: 'https://saweria.co/fajrush', icon: 'ph-coins' },
+            { id: 3, title: 'Top Up game terpercaya', url: 'https://saweria.co/fajrush/toko-top-up', icon: 'ph-game-controller' }
+        ];
+        const defaultPosts = [
+            { id: 101, image_url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400', caption: 'Setup gaming baru nih bro, gas mabar! 🕹️', likes: 12 },
+            { id: 102, image_url: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400', caption: 'Fokus grind sampe dapet rank mythical glory! 🔥', likes: 24 }
+        ];
+
+        // --- SISTEM MEMORI INTERNAL ---
+        let links = defaultLinks;
+        let posts = defaultPosts;
+
+        if (KODE_MASTER_DATA) {
+            links = KODE_MASTER_DATA.links;
+            posts = KODE_MASTER_DATA.posts;
+        } else if (localStorage.getItem('fajrush_local_links')) {
+            links = JSON.parse(localStorage.getItem('fajrush_local_links'));
+            posts = JSON.parse(localStorage.getItem('fajrush_local_posts'));
+        }
+
         const adminAccount = { username: "fajrush", password: "fajrush2007" };
 
         function createStars() {
             const field = document.getElementById('starField');
             for(let i=0; i<80; i++) {
-                let star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                let size = Math.random() * 2 + 1;
-                star.style.width = size + 'px'; star.style.height = size + 'px';
-                star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
-                field.appendChild(star);
+                let star = document.createElement('div'); star.className = 'star';
+                star.style.left = Math.random() * 100 + '%'; star.style.top = Math.random() * 100 + '%';
+                let size = Math.random() * 2 + 1; star.style.width = size + 'px'; star.style.height = size + 'px';
+                star.style.setProperty('--d', (Math.random() * 3 + 2) + 's'); field.appendChild(star);
             }
         }
 
         function createFallingRockets() {
             const field = document.getElementById('rocketField');
             for(let i=0; i<4; i++) {
-                let rocket = document.createElement('div');
-                rocket.className = 'falling-rocket'; rocket.innerText = '🚀';
-                rocket.style.left = (Math.random() * 60 + 30) + '%';
-                rocket.style.setProperty('--speed', (Math.random() * 4 + 4) + 's');
-                rocket.style.animationDelay = (Math.random() * 6) + 's';
-                field.appendChild(rocket);
+                let rocket = document.createElement('div'); rocket.className = 'falling-rocket'; rocket.innerText = '🚀';
+                rocket.style.left = (Math.random() * 60 + 30) + '%'; rocket.style.setProperty('--speed', (Math.random() * 4 + 4) + 's');
+                rocket.style.animationDelay = (Math.random() * 6) + 's'; field.appendChild(rocket);
             }
         }
 
-        async function loadData() {
-            let { data: dbLinks } = await _supabase.from('links').select('*').order('id', { ascending: true });
-            let { data: dbPosts } = await _supabase.from('posts').select('*').order('created_at', { ascending: false });
-
-            document.getElementById('linksContainer').innerHTML = (dbLinks || []).map(link => `
+        function loadData() {
+            document.getElementById('linksContainer').innerHTML = links.map(link => `
                 <a href="${link.url}" target="_blank" class="link-card">
                     <div class="link-left"><i class="ph-bold ${link.icon}"></i><span>${link.title}</span></div>
                     <i class="ph-bold ph-caret-right arrow"></i>
                 </a>
             `).join('');
 
-            document.getElementById('adminLinksList').innerHTML = (dbLinks || []).map(link => `
-                <div class="admin-item">
-                    <span>${link.title}</span>
+            document.getElementById('adminLinksList').innerHTML = links.map(link => `
+                <div class="admin-item"><span>${link.title}</span>
                     <i class="ph-bold ph-trash" style="color:#ef4444; cursor:pointer;" onclick="deleteLink(${link.id})"></i>
                 </div>
             `).join('');
 
-            document.getElementById('feedContainer').innerHTML = (dbPosts || []).map(post => `
+            document.getElementById('feedContainer').innerHTML = posts.map(post => `
                 <div class="feed-card">
                     <div class="feed-img-wrapper"><img src="${post.image_url}" alt="Post"></div>
                     <div class="feed-info">
                         <div class="feed-caption">${post.caption}</div>
-                        <button style="background:none; border:none; color:var(--accent-cyan); font-weight:800; font-size:11px; cursor:pointer;" onclick="addLike(${post.id}, ${post.likes})">✨ ${post.likes} EXPLORED</button>
+                        <button style="background:none; border:none; color:var(--accent-cyan); font-weight:800; font-size:11px; cursor:pointer;" onclick="addLike(${post.id})">✨ ${post.likes} EXPLORED</button>
                     </div>
                 </div>
             `).join('');
 
-            document.getElementById('adminFeedsList').innerHTML = (dbPosts || []).map(post => `
-                <div class="admin-item">
-                    <span style="font-size:12px; opacity:0.7; max-width:200px; overflow:hidden;">${post.caption}</span>
+            document.getElementById('adminFeedsList').innerHTML = posts.map(post => `
+                <div class="admin-item"><span style="font-size:12px; opacity:0.7; max-width:200px; overflow:hidden;">${post.caption}</span>
                     <i class="ph-bold ph-trash" style="color:#ef4444; cursor:pointer;" onclick="deletePost(${post.id})"></i>
                 </div>
             `).join('');
         }
 
-        async function addNewLink() {
+        function saveData() {
+            localStorage.setItem('fajrush_local_links', JSON.stringify(links));
+            localStorage.setItem('fajrush_local_posts', JSON.stringify(posts));
+            loadData();
+        }
+
+        function addNewLink() {
             const title = document.getElementById('newTitle').value;
             const url = document.getElementById('newUrl').value;
             const icon = document.getElementById('newIcon').value;
-            if(!title || !url) return alert('Wajib isi Portal Name & Coordinates!');
-            await _supabase.from('links').insert([{ title, url, icon }]);
+            if(!title || !url) return alert('Isi lengkap bro!');
+            links.push({ id: Date.now(), title, url, icon });
             document.getElementById('newTitle').value = ''; document.getElementById('newUrl').value = '';
-            loadData();
+            saveData();
         }
 
-        async function deleteLink(id) {
-            if(confirm('Collapse this wormhole?')) { await _supabase.from('links').delete().eq('id', id); loadData(); }
+        function deleteLink(id) {
+            if(confirm('Hapus link?')) { links = links.filter(l => l.id !== id); saveData(); }
         }
 
-        async function addNewPost() {
+        function addNewPost() {
             const fileInput = document.getElementById('postImage');
             const caption = document.getElementById('postCaption').value;
-            if(fileInput.files.length === 0 || !caption) return alert('Data transmission incomplete!');
+            if(fileInput.files.length === 0 || !caption) return alert('Isi lengkap bro!');
 
             const file = fileInput.files[0];
-            const fileName = `${Date.now()}.${file.name.split('.').pop()}`;
-            
-            let { data: uploadData, error } = await _supabase.storage.from('gallery').upload(fileName, file);
-            if(error) return alert('Gagal upload! Pastikan sudah membuat Bucket Storage bernama "gallery" berstatus Public di Supabase.');
-
-            const { data: urlData } = _supabase.storage.from('gallery').getPublicUrl(fileName);
-            await _supabase.from('posts').insert([{ image_url: urlData.publicUrl, caption, likes: 0 }]);
-            
-            fileInput.value = ''; document.getElementById('postCaption').value = '';
-            loadData();
-            alert('Transmission Successful! 🛰️');
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                posts.unshift({ id: Date.now(), image_url: reader.result, caption, likes: 0 });
+                fileInput.value = ''; document.getElementById('postCaption').value = '';
+                saveData();
+                alert('Berhasil terposting di HP lu! Jangan lupa masuk tab EXPORT biar bisa dilihat semua orang! 🚀');
+            };
+            reader.readAsDataURL(file);
         }
 
-        async function deletePost(id) {
-            if(confirm('Delete transmission?')) { await _supabase.from('posts').delete().eq('id', id); loadData(); }
+        function deletePost(id) {
+            if(confirm('Hapus post?')) { posts = posts.filter(p => p.id !== id); saveData(); }
         }
 
-        async function addLike(id, currentLikes) {
-            await _supabase.from('posts').update({ likes: currentLikes + 1 }).eq('id', id);
-            loadData();
+        function addLike(id) {
+            posts = posts.map(p => { if(p.id === id) p.likes++; return p; });
+            saveData();
+        }
+
+        function exportMasterData() {
+            const dataObj = { links: links, posts: posts };
+            const jsonString = JSON.stringify(dataObj);
+            navigator.clipboard.writeText(jsonString);
+            alert('GOKIL! Kode rahasia data lu berhasil disalin! Sekarang lu buka kodingan index.html lu, terus ganti tulisan `const KODE_MASTER_DATA = null;` menjadi `const KODE_MASTER_DATA = ' + jsonString + ';`. Terus update ke Vercel!');
         }
 
         function toggleAdminPanel() {
@@ -345,20 +355,20 @@
         function switchTab(tab) {
             document.getElementById('tabLinksContent').classList.toggle('hidden', tab !== 'links');
             document.getElementById('tabFeedsContent').classList.toggle('hidden', tab !== 'feeds');
+            document.getElementById('tabDataContent').classList.toggle('hidden', tab !== 'data');
             document.getElementById('tabLinkBtn').classList.toggle('active', tab === 'links');
             document.getElementById('tabFeedBtn').classList.toggle('active', tab === 'feeds');
+            document.getElementById('tabDataBtn').classList.toggle('active', tab === 'data');
         }
         function handleLogin() {
             if(document.getElementById('username').value === adminAccount.username && document.getElementById('password').value === adminAccount.password) {
                 sessionStorage.setItem('isAdminLoggedIn', 'true');
                 document.getElementById('loginView').classList.add('hidden'); document.getElementById('dashboardView').classList.remove('hidden');
-            } else { alert('ACCESS DENIED. WRONG CLEARANCE.'); }
+            } else { alert('ACCESS DENIED.'); }
         }
         function handleLogout() { sessionStorage.removeItem('isAdminLoggedIn'); backToLinks(); }
 
-        createStars();
-        createFallingRockets();
-        loadData();
+        createStars(); createFallingRockets(); loadData();
     </script>
 </body>
 </html>
